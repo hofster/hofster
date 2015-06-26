@@ -6,10 +6,10 @@ import glob, csv, datetime, time, sys, mysql.connector, timeit
 
 # Database
 dbconfig = {
-        'host' : '192.168.178.9',
+        'host' : '127.0.0.1',
         'port' : '3306',
-        'user' : 'openhab',
-        'password' : 'raspberry',
+        'user' : 'userid',
+        'password' : 'password',
         'database' : 'openhab'
     }
 dbtabletemperature = "Item4"

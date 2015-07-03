@@ -12,15 +12,14 @@ dbconfig = {
         'password' : 'password',
         'database' : 'openhab'
     }
-dbtabletemperature = "Item4"
-dbtablehumidity = "Item1"
-dbtableco2 = "Item12"
-#dbtablenoise = "Item99"
-dbtablepressure = "Item9"
+
+dbtabletemperature = "Item8"
+dbtablehumidity = "Item6"
+dbtableco2 = "Item11"
 
 # CSV files to import
 csvdirectory = "/Users/openhab/Downloads/"
-csvfilepattern = "NetatmoMainModuleName*.csv"
+csvfilepattern = "NetatmoAdditionalModuleName*.csv"
 csvencoding = "utf-8"
 csvdelimiter = ";"
 
@@ -55,10 +54,7 @@ humidduplicate = 0
 humidwritten = 0
 co2duplicate = 0
 co2written = 0
-#noiseduplicate = 0
-#noisewritten = 0
-pressureduplicate = 0
-pressurewritten = 0
+
 tic=timeit.default_timer()
 
 for csvfile in listfiles:
@@ -78,8 +74,6 @@ for csvfile in listfiles:
             temperature = row[2]
             humidity = row[3]
             co2 = row[4]
-            #noise=row[5]
-            pressure = row[6]
     
             # Check for existing temperature values
             sqlcommand = "SELECT * FROM " + dbtabletemperature + " WHERE Time = '" + date + "'"
@@ -128,36 +122,6 @@ for csvfile in listfiles:
                     print("Error INSERTing CO2 data:",sqlco2)
                     sys.exit(0)
 
-#            # Check for existing noise values
-#            sqlcommand = "SELECT * FROM " + dbtablenoise + " WHERE Time = '" + date + "'"
-#            cursor.execute(sqlcommand)
-#            result = cursor.fetchall()
-#            if result:
-#                noiseduplicate += 1
-#            else:
-#                sqlnoise="INSERT INTO " + dbtablenoise + " (Time,Value) VALUES ('" + date +"','" + noise +"')"
-#                try:
-#                    cursor.execute(sqlnoise)
-#                    noisewritten += 1
-#                except:
-#                    print("Error INSERTing CO2 data:",sqlnoise)
-#                    sys.exit(0)
-
-            # Check for existing pressure values
-            sqlcommand = "SELECT * FROM " + dbtablepressure + " WHERE Time = '" + date + "'"
-            cursor.execute(sqlcommand)
-            result = cursor.fetchall()
-            if result:
-                pressureduplicate += 1
-            else:
-                sqlpressure="INSERT INTO " + dbtablepressure + " (Time,Value) VALUES ('" + date +"','" + pressure +"')"
-                try:
-                    cursor.execute(sqlpressure)
-                    pressurewritten += 1
-                except:
-                    print("Error INSERTing pressure data:",sqlpressure)
-                    sys.exit(0)
-
     connection.commit ()
     ifile.close()
 
@@ -178,8 +142,4 @@ print("Skipped humidity entries: ", humidduplicate)
 print("Number of humidity entries written: ", humidwritten)
 print("Skipped CO2 entries: ", co2duplicate)
 print("Number of CO2 entries written: ", co2written)
-#print("Skipped noise entries: ", noiseduplicate)
-#print("Number of noise entries written: ", noisewritten)
-print("Skipped pressure entries: ", pressureduplicate)
-print("Number of pressure entries written: ", pressurewritten)
 print()
